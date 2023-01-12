@@ -1,10 +1,13 @@
 import app from './app';
 import { config } from './config';
+import { database } from './db';
 import { logger } from './logger';
 
 async function startServer() {
   try {
     const PORT = config.port;
+
+    await database.connect();
 
     const server = app.listen(PORT, async () => {
       logger.info('Application started');
@@ -14,6 +17,8 @@ async function startServer() {
     const teardown = async () => {
       try {
         logger.info('Tearing down application');
+
+        await database.disconnect();
 
         server.close(async (err) => {
           if (err) logger.error(err);
