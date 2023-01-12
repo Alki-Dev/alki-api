@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 
 import { httpLogger } from './logger';
-import { apiToken } from './middleware';
+import { apiToken, errorHandler } from './middleware';
 
 const app = express();
 
@@ -24,5 +24,7 @@ app.use(apiToken);
 app.use('/', (req, res) => {
   res.status(404).send(`Not found: ${req.url}`);
 });
+
+app.use(errorHandler);
 
 export default app;
