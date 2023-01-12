@@ -12,7 +12,12 @@ export const httpLogger = pinoHttp({
     ignore: (req) => blacklistedRoutes.includes(req.url ?? ''),
   },
   redact: {
-    paths: ['res.headers.authorization'],
+    paths: [
+      'res.headers.authorization',
+      'req.headers.authorization',
+      'req.headers["x-api-token"]',
+      'res.headers["x-api-token"]',
+    ],
     remove: true,
   },
   genReqId: (req, res) => {
