@@ -25,8 +25,9 @@ enum Environment {
 type Config = {
   appSecretKey: string;
   apiToken: string;
-  port: number;
   environment: Environment;
+  mongodbURI: string;
+  port: number;
 };
 
 const environment: Environment = (fetchNullableVariable('NODE_ENV') ??
@@ -41,7 +42,7 @@ const baseConfig = {
   environment,
 };
 
-function getConfigForEnvironment(environment: Environment) {
+function getConfigForEnvironment(environment: Environment): Partial<Config> {
   try {
     switch (environment) {
       case Environment.Production:
@@ -49,6 +50,8 @@ function getConfigForEnvironment(environment: Environment) {
       case Environment.Dev:
         return {
           apiToken: fetchVariable('API_TOKEN'),
+          appSecretKey: fetchVariable('APP_SECRET_KEY'),
+          mongodbURI: fetchVariable('MONGODB_URI'),
         };
       case Environment.Test:
         return {
@@ -72,7 +75,7 @@ function getConfigForEnvironment(environment: Environment) {
 }
 
 function getConfig(): Config {
-  return merge(baseConfig, getConfigForEnvironment(environment));
+  return merge(baseConfig, getConfigForEnvironment(environment)) as Config;
 }
 
 export const config = getConfig();
