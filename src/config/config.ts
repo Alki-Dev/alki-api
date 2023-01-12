@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { merge } from 'lodash';
 
-import { assertNever, generateToken } from '../utils';
+import { assertNever, generateToken, isAssertNeverError } from '../utils';
 
 export function fetchNullableVariable(key: string): string | null {
   return process.env[key] ?? null;
@@ -59,7 +59,7 @@ function getConfigForEnvironment(environment: Environment) {
         assertNever(environment);
     }
   } catch (err) {
-    if (err.message.includes('Unexpected object')) {
+    if (isAssertNeverError(err)) {
       throw new Error(
         `Environment "${environment}" is not valid, choose one from: ${Object.values(
           Environment,
