@@ -4,13 +4,8 @@ import pinoHttp from 'pino-http';
 
 import { createLogger } from './create-logger';
 
-const blacklistedRoutes = ['/health'];
-
 export const httpLogger = pinoHttp({
   logger: createLogger(),
-  autoLogging: {
-    ignore: (req) => blacklistedRoutes.includes(req.url ?? ''),
-  },
   redact: {
     paths: [
       'res.headers.authorization',
