@@ -13,11 +13,13 @@ app.use(
     exposedHeaders: ['x-auth-token', 'x-refresh-token'],
   }),
 );
-app.use(httpLogger);
 
 app.get('/health', (_req, res) => {
   res.send('OK');
 });
+app.get('/favicon.ico', (_req, res) => res.status(204).end());
+
+app.use(httpLogger);
 
 app.use(apiToken);
 
